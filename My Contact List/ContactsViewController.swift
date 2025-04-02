@@ -1,21 +1,31 @@
-//
-//  ContactsViewController.swift
-//  My Contact List
-//
-//  Created by Ajdin Seho on 4/1/25.
-//
-
 import UIKit
 
 class ContactsViewController: UIViewController {
 
+    @IBOutlet weak var sgmtEditMode: UISegmentedControl!
+    @IBOutlet weak var txtName: UITextField!
+    @IBOutlet weak var txtAddress: UITextField!
+    @IBOutlet weak var txtCity: UITextField!
+    @IBOutlet weak var txtState: UITextField!
+    @IBOutlet weak var txtZip: UITextField!
+    @IBOutlet weak var txtCell: UITextField!
+    @IBOutlet weak var txtPhone: UITextField!
+    
+    
+    @IBOutlet weak var txtEmail: UITextField!
+    
+    @IBOutlet weak var lblBirthday: UILabel!
+    
+    
+    @IBOutlet weak var btnChange: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-    
         // Do any additional setup after loading the view.
+        self.changeEditMode(self)
     }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.registerKeyboardNotifications()
@@ -24,6 +34,30 @@ class ContactsViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.unregisterKeyboardNotifications()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    @IBAction func changeEditMode(_ sender: Any) {
+        let textFields: [UITextField] = [txtName, txtAddress, txtCity, txtState,
+                                         txtZip, txtPhone, txtCell, txtEmail]
+
+        if sgmtEditMode.selectedSegmentIndex == 0 {
+            for textField in textFields {
+                textField.isEnabled = false
+                textField.borderStyle = .none
+            }
+            btnChange.isHidden = true
+        } else if sgmtEditMode.selectedSegmentIndex == 1 {
+            for textField in textFields {
+                textField.isEnabled = true
+                textField.borderStyle = .roundedRect
+            }
+            btnChange.isHidden = false
+        }
     }
 
     func registerKeyboardNotifications() {
@@ -63,6 +97,4 @@ class ContactsViewController: UIViewController {
         self.scrollView.contentInset = contentInset
         self.scrollView.scrollIndicatorInsets = .zero
     }
-
-
 }

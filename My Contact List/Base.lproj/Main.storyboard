@@ -294,8 +294,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Upx-Ea-JTd">
-                                <rect key="frame" x="26" y="110" width="320" height="267.33333333333331"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Upx-Ea-JTd">
+                                <rect key="frame" x="36.666666666666657" y="292.33333333333337" width="320" height="267.33333333333337"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort Order:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qJe-DV-239">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="20.333333333333332"/>
@@ -304,10 +304,10 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uf1-Fg-2xw">
-                                        <rect key="frame" x="0.0" y="20.333333333333343" width="320" height="216"/>
+                                        <rect key="frame" x="0.0" y="20.333333333333371" width="320" height="216"/>
                                     </pickerView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="S48-RG-4Jx">
-                                        <rect key="frame" x="0.0" y="236.33333333333334" width="320" height="31.000000000000028"/>
+                                        <rect key="frame" x="0.0" y="236.33333333333331" width="320" height="31"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ascending Order:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xvg-hl-Pg9">
                                                 <rect key="frame" x="0.0" y="0.0" width="261" height="31"/>
@@ -317,6 +317,9 @@
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ea0-YV-KSP">
                                                 <rect key="frame" x="271" y="0.0" width="51" height="31"/>
+                                                <connections>
+                                                    <action selector="sortDirectionChanged:" destination="pO3-ht-r7l" eventType="valueChanged" id="Ycf-YC-R7D"/>
+                                                </connections>
                                             </switch>
                                         </subviews>
                                     </stackView>
@@ -326,8 +329,16 @@
                         <viewLayoutGuide key="safeArea" id="cCX-eu-FYx"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <accessibility key="accessibilityConfiguration" label="Settings"/>
+                        <constraints>
+                            <constraint firstItem="Upx-Ea-JTd" firstAttribute="centerX" secondItem="eWp-zY-ONc" secondAttribute="centerX" id="4g3-Rj-ZL5"/>
+                            <constraint firstItem="Upx-Ea-JTd" firstAttribute="centerY" secondItem="eWp-zY-ONc" secondAttribute="centerY" id="nDL-VH-Jdj"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" systemItem="more" id="JiF-gu-7e1"/>
+                    <connections>
+                        <outlet property="pckSortField" destination="uf1-Fg-2xw" id="zA1-w9-j1q"/>
+                        <outlet property="swAscending" destination="Ea0-YV-KSP" id="nCo-a4-5iT"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8HF-dY-2fC" sceneMemberID="firstResponder"/>
             </objects>

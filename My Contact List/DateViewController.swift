@@ -7,13 +7,40 @@
 
 import UIKit
 
+protocol DateControllerDelegate: class {
+    func dateChanged(date: Date)
+}
+
+
+
 class DateViewController: UIViewController {
 
+    @IBOutlet weak var dtpDate: UIDatePicker!
+    
+    
+    
+    weak var delegate: DateControllerDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        let saveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.save,
+                                         target: self,
+                                         action: #selector(saveDate))
+        
+        self.navigationItem.rightBarButtonItem = saveButton
+        self.title = "Pick Birthdate"
     }
+
+    @objc func saveDate() {
+        self.delegate?.dateChanged(date: dtpDate.date)
+        self.navigationController?.popViewController(animated: true)
+    }
+
+    
+
+    
+    
     
 
     /*

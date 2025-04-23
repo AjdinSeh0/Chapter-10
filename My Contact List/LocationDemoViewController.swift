@@ -1,13 +1,13 @@
 //
-//  DateViewController.swift
+//  LocationDemoViewController.swift
 //  My Contact List
 //
-//  Created by Ajdin Seho on 4/15/25.
+//  Created by Ajdin Seho on 4/23/25.
 //
 
 import UIKit
 
-class DateViewController: UIViewController {
+class LocationDemoViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -1,9 +1,4 @@
-//
-//  SettingsViewController.swift
-//  My Contact List
-//
-//  Created by Ajdin Seho on 4/1/25.
-//
+
 
 import UIKit
 
@@ -23,6 +18,41 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         pckSortField.dataSource = self;
         pckSortField.delegate = self;
     }
+    
+    override func viewDidAppear(_ animated: Bool){
+        let device = UIDevice.current
+        print("Device info:")
+        print("Name: \(device.name)")
+        
+        print("Model: \(device.model)")
+        print("System Name: \(device.systemName)")
+        print("System Version: \(device.systemVersion)")
+        print("Identifier: \(device.identifierForVendor!)")
+        
+        let orientation: String
+        switch device.orientation {
+        case .faceDown:
+            orientation = "Face Down"
+        case .landscapeLeft:
+            orientation = "Landscape Left"
+        case .portrait:
+            orientation = "Portrait"
+        case .landscapeRight:
+            orientation = "Landscape Right"
+        case .faceUp:
+            orientation = "Face Up"
+        case .portraitUpsideDown:
+            orientation = "Portrait Upside Down"
+        case .unknown:
+            orientation = "Unknown Orientation"
+        @unknown default:
+            fatalError()
+        }
+        print("Orientation: \(orientation)")
+              
+    }
+    
+    
 
     @IBAction func sortDirectionChanged(_ sender: Any) {
         let settings = UserDefaults.standard

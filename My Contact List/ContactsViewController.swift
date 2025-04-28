@@ -1,5 +1,6 @@
 import UIKit
 import CoreData
+import AVFoundation
 
 class ContactsViewController: UIViewController, UITextFieldDelegate, DateControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
@@ -11,7 +12,7 @@ class ContactsViewController: UIViewController, UITextFieldDelegate, DateControl
     @IBOutlet weak var txtAddress: UITextField!
     @IBOutlet weak var txtCity: UITextField!
     @IBOutlet weak var txtState: UITextField!
-    @IBOutlet weak var txtZip: UITextField!
+    @IBOutlet weak var txtZip: UITextField!     
     @IBOutlet weak var txtCell: UITextField!
     @IBOutlet weak var txtPhone: UITextField!
     @IBOutlet weak var lblBirthdate: UILabel!
@@ -200,15 +201,48 @@ class ContactsViewController: UIViewController, UITextFieldDelegate, DateControl
 
     
     @IBAction func changePicture(_ sender: Any) {
-        if UIImagePickerController.isSourceTypeAvailable(.camera){
-            let cameraController = UIImagePickerController()
-            cameraController.sourceType = .camera
-            cameraController.cameraCaptureMode = .photo
-            cameraController.delegate = self
-            cameraController.allowsEditing = true
-            self.present(cameraController, animated: true, completion: nil)
+        if AVCaptureDevice.authorizationStatus(for: AVMediaType.video) != AVAuthorizationStatus.authorized {
+            // Camera not authorized
+            let alertController = UIAlertController(title: "Camera Access Denied",
+                                                     message: "In order to take pictures, you need to allow the app to access the camera in the Settings.",
+                                                     preferredStyle: .alert)
+            
+            let actionSettings = UIAlertAction(title: "Open Settings",
+                                               style: .default) { action in
+                self.openSettings()
+            }
+            
+            let actionCancel = UIAlertAction(title: "Cancel",
+                                             style: .cancel,
+                                             handler: nil)
+            
+            alertController.addAction(actionSettings)
+            alertController.addAction(actionCancel)
+            present(alertController, animated: true, completion: nil)
+        }
+        else {
+            // Already Authorized
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                let cameraController = UIImagePickerController()
+                cameraController.sourceType = .camera
+                cameraController.cameraCaptureMode = .photo
+                cameraController.delegate = self
+                cameraController.allowsEditing = true
+                self.present(cameraController, animated: true, completion: nil)
+            }
         }
     }
+
+    func openSettings() {
+        if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(settingsUrl)
+            }
+        }
+    }
+
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let image = info[.editedImage] as? UIImage {

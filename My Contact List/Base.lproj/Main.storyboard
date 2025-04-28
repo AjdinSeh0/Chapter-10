@@ -724,6 +724,7 @@
                     <connections>
                         <outlet property="lblBattery" destination="2KW-ee-rTe" id="AbG-eN-IA8"/>
                         <outlet property="pckSortField" destination="uf1-Fg-2xw" id="zA1-w9-j1q"/>
+                        <outlet property="settingsView" destination="eWp-zY-ONc" id="6aC-MK-zox"/>
                         <outlet property="swAscending" destination="Ea0-YV-KSP" id="nCo-a4-5iT"/>
                     </connections>
                 </viewController>

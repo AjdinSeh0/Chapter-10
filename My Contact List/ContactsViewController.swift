@@ -1,7 +1,7 @@
 import UIKit
 import CoreData
 
-class ContactsViewController: UIViewController, UITextFieldDelegate, DateControllerDelegate {
+class ContactsViewController: UIViewController, UITextFieldDelegate, DateControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
     var currentContact: Contact?
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -16,6 +16,11 @@ class ContactsViewController: UIViewController, UITextFieldDelegate, DateControl
     @IBOutlet weak var txtPhone: UITextField!
     @IBOutlet weak var lblBirthdate: UILabel!
     
+    @IBOutlet weak var lblPhone: UILabel!
+    
+    @IBOutlet weak var imgContactPicture: UIImageView!
+    
+    
     
     @IBOutlet weak var txtEmail: UITextField!
     
@@ -28,32 +33,55 @@ class ContactsViewController: UIViewController, UITextFieldDelegate, DateControl
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if currentContact != nil {
-            txtName.text = currentContact!.contactName
-            txtAddress.text = currentContact!.streetAddress
-            txtCity.text = currentContact!.city
-            txtState.text = currentContact!.state
-            txtZip.text = currentContact!.zipCode
-            txtPhone.text = currentContact!.phoneNumber
-            txtCell.text = currentContact!.cellNumber
-            txtEmail.text = currentContact!.email
+        if let contact = currentContact {
+            txtName.text = contact.contactName
+            txtAddress.text = contact.streetAddress
+            txtCity.text = contact.city
+            txtState.text = contact.state
+            txtZip.text = contact.zipCode
+            txtPhone.text = contact.phoneNumber
+            txtCell.text = contact.cellNumber
+            txtEmail.text = contact.email
             
             let formatter = DateFormatter()
             formatter.dateStyle = .short
-            if currentContact!.birthday != nil {
-                lblBirthdate.text = formatter.string(from: currentContact!.birthday as! Date)
+            
+            if let birthday = contact.birthday as? Date {
+                lblBirthdate.text = formatter.string(from: birthday)
+            }
+            
+            if let imageData = contact.image {
+                imgContactPicture.image = UIImage(data: imageData)
             }
         }
         
-       changeEditMode(self)
+        changeEditMode(self)
         
         let textFields: [UITextField] = [txtName, txtAddress, txtCity, txtState, txtZip, txtPhone, txtCell, txtEmail]
-        for textfield in textFields {
-            textfield.addTarget(self,
+        for textField in textFields {
+            textField.addTarget(self,
                                 action: #selector(UITextFieldDelegate.textFieldShouldEndEditing(_:)),
-                                for: UIControl.Event.editingDidEnd)
+                                for: .editingDidEnd)
+        }
+        
+        lblPhone.isUserInteractionEnabled = true
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(callPhone(gesture:)))
+        lblPhone.addGestureRecognizer(longPress)
+    }
+
+    @objc func callPhone(gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .began {
+            if let number = txtPhone.text, !number.isEmpty {
+                if let phoneURL = URL(string: "telprompt://\(number)") {
+                    UIApplication.shared.open(phoneURL, options: [:], completionHandler: nil)
+                    print("Calling Phone Number: \(phoneURL)")
+                }
+            }
         }
     }
+
+    
+    
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         if currentContact == nil{
@@ -170,6 +198,32 @@ class ContactsViewController: UIViewController, UITextFieldDelegate, DateControl
         }
     }
 
+    
+    @IBAction func changePicture(_ sender: Any) {
+        if UIImagePickerController.isSourceTypeAvailable(.camera){
+            let cameraController = UIImagePickerController()
+            cameraController.sourceType = .camera
+            cameraController.cameraCaptureMode = .photo
+            cameraController.delegate = self
+            cameraController.allowsEditing = true
+            self.present(cameraController, animated: true, completion: nil)
+        }
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        if let image = info[.editedImage] as? UIImage {
+            imgContactPicture.contentMode = .scaleAspectFit
+            imgContactPicture.image = image
+
+            if currentContact == nil {
+                let context = appDelegate.persistentContainer.viewContext
+                currentContact = Contact(context: context)
+            }
+            currentContact?.image = image.jpegData(compressionQuality: 1.0)
+        }
+
+        dismiss(animated: true, completion: nil)
+    }
     
     
 }

@@ -8,16 +8,54 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     
     @IBOutlet weak var swAscending: UISwitch!
     
+    @IBOutlet weak var lblBattery: UILabel!
+    
     let sortOrderItems: Array<String> = ["contactName", "city", "birthday", "email"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         
-        pckSortField.dataSource = self;
-        pckSortField.delegate = self;
+        // Do any additional setup after loading the view.
+        pckSortField.dataSource = self
+        pckSortField.delegate = self
+
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        NotificationCenter.default.addObserver(self,
+                                                selector: #selector(self.batteryChanged),
+                                                name: UIDevice.batteryStateDidChangeNotification,
+                                                object: nil)
+
+        NotificationCenter.default.addObserver(self,
+                                                selector: #selector(self.batteryChanged),
+                                                name: UIDevice.batteryLevelDidChangeNotification,
+                                                object: nil)
+
+        self.batteryChanged()
     }
+    
+   @objc func batteryChanged() {
+        let device = UIDevice.current
+        var batteryState: String
+        switch(device.batteryState) {
+        case .charging:
+            batteryState = "+"
+        case .full:
+            batteryState = "!"
+        case .unplugged:
+            batteryState = "-"
+        case .unknown:
+            batteryState = "?"
+        }
+        
+        let batteryLevelPercent = device.batteryLevel * 100
+        let batteryLevel = String(format: "%.0f%%", batteryLevelPercent)
+        let batteryStatus = "\(batteryLevel) (\(batteryState))"
+        lblBattery.text = batteryStatus
+    }
+
+    
+    
+
     
     override func viewDidAppear(_ animated: Bool){
         let device = UIDevice.current
